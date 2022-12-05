@@ -9,19 +9,19 @@
                 let tr = document.createElement('tr');
                 let tdPosition = document.createElement('td');
                 let tdNom = document.createElement('td');
-                let tdNationalite = document.createElement('td');
+                let tdDateNaissance = document.createElement('td');
                 let tdVoiture = document.createElement('td');
                 let tdPoints = document.createElement('td');
                 // Définit les valeurs du tableau
                 tdPosition.innerText = element.position;
-                tdNom.innerText = element.Driver.givenName + " " + element.Driver.familyName;
-                tdNationalite.innerText = element.Driver.nationality.substr(0,3).toUpperCase();
+                tdNom.innerText = element.Driver.givenName + " " + element.Driver.familyName.toUpperCase();
+                tdDateNaissance.innerText = new Date(element.Driver.dateOfBirth).toLocaleDateString();
                 tdVoiture.innerText = element.Constructors[0].name.toUpperCase();
                 tdPoints.innerText = element.points;
                 // Ajoute chaque <td> dans le <tr>
                 tr.appendChild(tdPosition);
                 tr.appendChild(tdNom);
-                tr.appendChild(tdNationalite);
+                tr.appendChild(tdDateNaissance);
                 tr.appendChild(tdVoiture);
                 tr.appendChild(tdPoints);
                 // Ajoute le <tr> au tableau
@@ -35,9 +35,9 @@
             method: "GET",
             dataType: "json"
         })
-        .done((response) => {
-            getDataFromReq(response.MRData.StandingsTable.StandingsLists[0]);
-        })
-        .fail((error) => console.log("La requête s'est terminée en échec. Infos : " + JSON.stringify(error)));
+            .done((response) => {
+                getDataFromReq(response.MRData.StandingsTable.StandingsLists[0]);
+            })
+            .fail((error) => console.log("La requête s'est terminée en échec. Infos : " + JSON.stringify(error)));
     });
 })(jQuery);
