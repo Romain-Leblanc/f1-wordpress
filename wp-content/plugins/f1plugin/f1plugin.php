@@ -66,8 +66,53 @@ function f1_admin_page()
     <?php
 }
 
+/* Retourne VRAI ou FAUX si le contenu de la page contient le nom du shortcode */
+function f1_shortcode_content_exist()
+{
+    if (has_shortcode(get_the_content(), "f1plugin")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/* Champ formulaire classement pilotes */
+function f1_classement_pilotes_switch()
+{
+    ?>
+    <label class="switch">
+        <input type="checkbox" name="f1plugin-classement-pilotes" value="activate" <?php checked("activate", get_option("f1plugin-classement-pilotes"), true); ?>>
+        <span class="slider round"></span>
+    </label>
+    <?php
+}
+/* Champ formulaire classement équipes */
+function f1_classement_equipes_switch()
+{
+    ?>
+    <label class="switch">
+        <input type="checkbox" name="f1plugin-classement-equipes" value="activate" <?php checked("activate", get_option("f1plugin-classement-equipes"), true); ?>>
+        <span class="slider round"></span>
+    </label>
+    <?php
+}
+
+add_action("admin_init", "f1_admin_section_settings");
+
 function f1_front($attr) {
-    return "<h2>test affichage</h2>";
+    // Si la page appelée est le classement des pilotes
+    if ($attr['page'] == "classement-pilotes") {
+        $html = "<table id='table' class='table'><thead>";
+        $html .= "<tr><th scope='col'>POS</th><th scope='col'>Pilote</th><th scope='col'>Nationalité</th><th scope='col'>Voiture</th><th scope='col'>PTS</th></tr></thead><tbody id='tbody'>";
+        $html .= "</tbody></table>";
+    }
+    // Sinon si la page appelée est le classement des équipes
+    elseif ($attr['page'] == "classement-equipes") {
+        $html = "<table id='table' class='table'><thead>";
+        $html .= "<tr><th scope='col'>POS</th><th scope='col'>Équipes</th><th scope='col'>PTS</th></tr></thead><tbody id='tbody'>";
+        $html .= "</tbody></table>";
+    }
+    return $html;
 }
 
 // Ajout du shortcode dans la liste des shortcodes
