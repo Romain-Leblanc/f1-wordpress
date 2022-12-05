@@ -22,10 +22,10 @@ function f1_admin_head()
     if(f1_shortcode_content_exist() && f1_shortcode_inarray(f1_shortcode_getAttribute())) {
         // Les shortcodes "classement-pilotes" et "classement-equipes" n'utilisent pas de CSS personnalisé donc aucune importation nécessaire
         // Si le paramètre du shortcode est égale a une certaine valeur, on importe le fichier de style et/ou de script
-        if (f1_shortcode_getAttribute() == "classement-pilotes") {
+        if (f1_shortcode_getAttribute() == "classement-pilotes" && get_option("f1plugin-classement-pilotes") == "activate") {
             wp_enqueue_script('script-classement-pilotes-js', plugin_dir_url(__FILE__) . '/includes/scripts/scriptClassementPilotes.js', ['jquery'], '1.0', true);
         }
-        elseif (f1_shortcode_getAttribute() == "classement-equipes") {
+        elseif (f1_shortcode_getAttribute() == "classement-equipes" && get_option("f1plugin-classement-equipes") == "activate") {
             wp_enqueue_script('script-classement-equipes-js', plugin_dir_url(__FILE__) . '/includes/scripts/scriptClassementEquipes.js', ['jquery'], '1.0', true);
         }
         wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . '/includes/bootstrap-5.1.3/js/bootstrap.min.js');
@@ -71,6 +71,12 @@ function f1_admin_page()
             submit_button();
             ?>
         </form>
+        <div>
+            <h4 style="font-style: italic;">Pour afficher la page correspondante, veuillez insérer le shortcode suivant :</h4>
+            <span style="color: blue;">[f1plugin page="classement-pilotes"]</span><br>
+            <span>ou</span><br>
+            <span style="color: blue;">[f1plugin page="classement-equipes"]</span>
+        </div>
     </div>
     <?php
 }
@@ -91,7 +97,6 @@ function f1_classement_pilotes_switch()
     ?>
     <label class="switch">
         <input type="checkbox" name="f1plugin-classement-pilotes" value="activate" <?php checked("activate", get_option("f1plugin-classement-pilotes"), true); ?>>
-        <span class="slider round"></span>
     </label>
     <?php
 }
@@ -102,7 +107,6 @@ function f1_classement_equipes_switch()
     ?>
     <label class="switch">
         <input type="checkbox" name="f1plugin-classement-equipes" value="activate" <?php checked("activate", get_option("f1plugin-classement-equipes"), true); ?>>
-        <span class="slider round"></span>
     </label>
     <?php
 }
@@ -164,19 +168,65 @@ function f1_shortcode_getAttribute()
 
 /* Affichage HTML */
 function f1_front($attr) {
-    // Si la page appelée est le classement des pilotes
-    if ($attr['page'] == "classement-pilotes") {
-        $html = "<table id='table' class='table'><thead>";
-        $html .= "<tr><th scope='col'>Position</th><th scope='col'>Pilote</th><th scope='col'>Date naissance</th><th scope='col'>Voiture</th><th scope='col'>PTS</th></tr></thead><tbody id='tbody'>";
-        $html .= "</tbody></table>";
+    $html = "";
+
+    if(isset($attr['page']) && trim($attr['page']) != "") {
+        // Si le contenu de la page contient le shortcode, l'un des paramètres du shortcode et qu'il soit écrit sous la forme [f1plugin name="<nom_page>" ]
+        if (f1_shortcode_content_exist() && f1_shortcode_inarray($attr['page']) && f1_shortcode_getAttribute() === $attr['page']) {
+
+            // Le contenu des pages est généré avec les scripts importés correspondant à la page
+
+            // Si la page appelée est le classement des pilotes
+            if ($attr['page'] == "classement-pilotes") {
+                // Si l'option est cochée en admin et que l'utilisateur n'est pas en train de visualiser la page côté administrateur, on retourne son contenu
+                if (get_option("f1plugin-classement-pilotes") == "activate" && !is_admin() && empty($_GET['action'])) {
+                    $html = "<table id='table' class='table'><thead>";
+                    $html .= "<tr><th scope='col'>Position</th><th scope='col'>Pilote</th><th scope='col'>Date naissance</th><th scope='col'>Voiture</th><th scope='col'>PTS</th></tr></thead><tbody id='tbody'>";
+                    $html .= "</tbody></table>";
+                }
+                // Sinon, on affiche un message d'erreur
+                elseif (get_option("f1plugin-classement-pilotes") == "") {
+                    $html = f1_page_disabled();
+                }
+            }
+            // Sinon si la page appelée est le classement des équipes
+            elseif ($attr['page'] == "classement-equipes") {
+                // Si l'option est cochée en admin et que l'utilisateur n'est pas en train de visualiser la page côté administrateur, on retourne son contenu
+                if (get_option("f1plugin-classement-equipes") == "activate" && !is_admin() && empty($_GET['action'])) {
+                    $html = "<table id='table' class='table'><thead>";
+                    $html .= "<tr><th scope='col'>Position</th><th scope='col'>Équipes</th><th scope='col'>PTS</th></tr></thead><tbody id='tbody'>";
+                    $html .= "</tbody></table>";
+                }
+                // Sinon, on affiche un message d'erreur
+                elseif (get_option("f1plugin-classement-equipes") == "") {
+                    $html = f1_page_disabled();
+                }
+            }
+        }
+        // Sinon si la page contient seulement le shortcode mais que le reste indiqué est incorrect, on affiche un message
+        elseif (f1_shortcode_content_exist()) {
+            if (!is_admin() && empty($_GET['action'])) {
+                $html = f1_page_attribute_error();
+            }
+        }
     }
-    // Sinon si la page appelée est le classement des équipes
-    elseif ($attr['page'] == "classement-equipes") {
-        $html = "<table id='table' class='table'><thead>";
-        $html .= "<tr><th scope='col'>Position</th><th scope='col'>Équipes</th><th scope='col'>PTS</th></tr></thead><tbody id='tbody'>";
-        $html .= "</tbody></table>";
+    // Sinon si la page contient seulement le shortcode mais que le reste indiqué est incorrect, on affiche un message
+    elseif (f1_shortcode_content_exist()) {
+        if (!is_admin() && empty($_GET['action'])) {
+            $html = f1_page_attribute_error();
+        }
     }
     return $html;
+}
+
+/* Retourne une erreur que la page voulue est désactivée en administrateur */
+function f1_page_disabled() {
+    return "<p>Pour afficher cette page du plugin, veuillez l'activer côté administrateur.</p>";
+}
+
+/* Retourne une erreur que l'attribut du plugin n'est pas correct */
+function f1_page_attribute_error() {
+    return "<p>Le shortcode du plugin est correct mais son paramètre saisi ne l'est pas.<br>Veuillez à ce que l'écriture du shortcode soit constitué de la façon précisée dans les paramètres du plugin.</p>";
 }
 
 /* Ajout du shortcode dans la liste des shortcodes */
