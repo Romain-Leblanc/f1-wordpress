@@ -18,9 +18,10 @@ $arraySettingsContent['classement-equipes'] = "Afficher la page du classement de
 /* Inclus les fichiers JS dans l'en-tête de la page */
 function f1_admin_head()
 {
-    // Si la page contient le shortcode et l'un des paramètres utilisé par le plugin
+    // Si la page contient le shortcode et l'un des paramètres utilisés par le plugin
     if(f1_shortcode_content_exist() && f1_shortcode_inarray(f1_shortcode_getAttribute())) {
-        // Les shortcodes "classement-pilotes" et "classement-equipes" n'utilisent pas de CSS personnalisé donc aucune importation nécessaire
+        // Les attributs de shortcode "classement-pilotes" et "classement-equipes" n'utilisent pas de CSS personnalisé donc aucune importation de CSS personnel nécessaire
+
         // Si le paramètre du shortcode est égale a une certaine valeur, on importe le fichier de style et/ou de script
         if (f1_shortcode_getAttribute() == "classement-pilotes" && get_option("f1plugin-classement-pilotes") == "activate") {
             wp_enqueue_script('script-classement-pilotes-js', plugin_dir_url(__FILE__) . '/includes/scripts/scriptClassementPilotes.js', ['jquery'], '1.0', true);
@@ -112,7 +113,7 @@ function f1_classement_equipes_switch()
 }
 
 /* Retourne VRAI ou FAUX si le shortcode de la page fait parti de la liste des shortcodes du plugin */
-function f1_shortcode_inarray($shortcodeName)
+function f1_shortcode_inarray(string $shortcodeName)
 {
     global $arraySettingsContent;
 
@@ -127,7 +128,7 @@ function f1_shortcode_inarray($shortcodeName)
 }
 
 /* Récupère la valeur de l'attribut "page" du shortcode */
-function get_attribute($tag, $text)
+function get_attribute(string $tag, string $text)
 {
     // Récupère l'expression régulière du shortcode
     preg_match_all( '/' . get_shortcode_regex() . '/s', $text, $matches );
@@ -171,10 +172,10 @@ function f1_front($attr) {
     $html = "";
 
     if(isset($attr['page']) && trim($attr['page']) != "") {
-        // Si le contenu de la page contient le shortcode, l'un des paramètres du shortcode et qu'il soit écrit sous la forme [f1plugin name="<nom_page>" ]
+        // Si le contenu de la page contient le shortcode, l'un des paramètres du shortcode et qu'il soit écrit sous la forme [f1plugin page="<nom_page>"]
         if (f1_shortcode_content_exist() && f1_shortcode_inarray($attr['page']) && f1_shortcode_getAttribute() === $attr['page']) {
 
-            // Le contenu des pages est généré avec les scripts importés correspondant à la page
+            // Le contenu des pages est généré avec les scripts importés dans la fonction "f1_admin_head()" qui correspondent à la page
 
             // Si la page appelée est le classement des pilotes
             if ($attr['page'] == "classement-pilotes") {
@@ -226,7 +227,8 @@ function f1_page_disabled() {
 
 /* Retourne une erreur que l'attribut du plugin n'est pas correct */
 function f1_page_attribute_error() {
-    return "<p>Le shortcode du plugin est correct mais son paramètre saisi ne l'est pas.<br>Veuillez à ce que l'écriture du shortcode soit constitué de la façon précisée dans les paramètres du plugin.</p>";
+    return "<p>Le shortcode du plugin est correct mais son paramètre saisi ne l'est pas.<br>
+            Veuillez à ce que l'écriture du shortcode soit constitué de la façon précisée dans les paramètres du plugin.</p>";
 }
 
 /* Ajout du shortcode dans la liste des shortcodes */
