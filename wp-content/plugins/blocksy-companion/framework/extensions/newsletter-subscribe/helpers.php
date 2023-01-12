@@ -1,26 +1,8 @@
 <?php
 
-function blc_output_newsletter_subscribe_form_cache() {
-	if (! is_customize_preview()) return;
-
-	blocksy_add_customizer_preview_cache(
-		blocksy_html_tag(
-			'div',
-			[ 'data-id' => 'blocksy-mailchimp-subscribe' ],
-			blc_ext_newsletter_subscribe_form(true)
-		)
-	);
-}
-
-function blc_ext_newsletter_subscribe_form($forced = false) {
-	if (! $forced) {
-		blc_output_newsletter_subscribe_form_cache();
-	}
-
+function blc_ext_newsletter_subscribe_form() {
 	if (get_theme_mod('newsletter_subscribe_single_post_enabled', 'yes') !== 'yes') {
-		if (! $forced) {
-			return '';
-		}
+		return '';
 	}
 
 	if (
@@ -61,10 +43,6 @@ function blc_ext_newsletter_subscribe_form($forced = false) {
 			__('Your email', 'blocksy-companion')
 		)
 	];
-
-	if ($forced) {
-		$args['has_name'] = 'yes';
-	}
 
 	$list_id = null;
 

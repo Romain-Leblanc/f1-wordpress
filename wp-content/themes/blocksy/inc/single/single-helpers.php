@@ -235,7 +235,13 @@ function blocksy_author_meta_elements($args = []) {
 		'count' => true,
 	]);
 
-	$posts_count = count_user_posts(blocksy_get_author_id());
+	$posts_count = count_user_posts(
+		blocksy_get_author_id(),
+		array_merge(
+			['post'],
+			blocksy_manager()->post_types->get_supported_post_types()
+		)
+	);
 
 	$container_attr = array_merge([
 		'class' => 'entry-meta',
@@ -355,16 +361,22 @@ function blocksy_author_box() {
 			?>
 
 			<?php if ($has_author_box_posts_count) {
-					$posts_count = count_user_posts(blocksy_get_author_id());
+				$posts_count = count_user_posts(
+					blocksy_get_author_id(),
+					array_merge(
+						['post'],
+						blocksy_manager()->post_types->get_supported_post_types()
+					)
+				);
 
-					echo blocksy_html_tag(
-						'a',
-						[
-							'href' => get_author_posts_url(blocksy_get_author_id()),
-							'class' => 'ct-author-box-more'
-						],
-						esc_html(__('Articles', 'blocksy')) . ':&nbsp;' . $posts_count
-					);
+				echo blocksy_html_tag(
+					'a',
+					[
+						'href' => get_author_posts_url(blocksy_get_author_id()),
+						'class' => 'ct-author-box-more'
+					],
+					esc_html(__('Articles', 'blocksy')) . ':&nbsp;' . $posts_count
+				);
 			} ?>
 		</section>
 	</div>

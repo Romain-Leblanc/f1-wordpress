@@ -1,8 +1,5 @@
 import ctEvents from 'ct-events'
-import {
-	getCache,
-	handleResponsiveSwitch,
-} from '../../../../static/js/customizer/sync/helpers'
+import { handleResponsiveSwitch } from '../../../../static/js/customizer/sync/helpers'
 import {
 	responsiveClassesFor,
 	getRootSelectorFor,
@@ -262,29 +259,7 @@ ctEvents.on(
 				values.socialsIconSize
 		}
 
-		if (optionId === 'footer_socials') {
-			const newHtml = getCache().querySelector(
-				`.ct-customizer-preview-cache [data-id="socials-general-cache"]`
-			).innerHTML
-
-			const cache = document.createElement('div')
-			cache.innerHTML = newHtml
-
-			el.querySelector('.ct-social-box').innerHTML = ''
-
-			optionValue.map(({ id, enabled }) => {
-				if (!enabled) return
-
-				el.querySelector('.ct-social-box').appendChild(
-					cache.querySelector(`[data-network=${id}]`)
-				)
-			})
-		}
-
-		if (
-			optionId === 'footer_socials' ||
-			optionId === 'socialsLabelVisibility'
-		) {
+		if (optionId === 'socialsLabelVisibility') {
 			let socialsLabelVisibility = values.socialsLabelVisibility || {
 				desktop: false,
 				tablet: false,

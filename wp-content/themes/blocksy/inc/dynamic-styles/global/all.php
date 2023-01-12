@@ -344,7 +344,7 @@ if ($sidebar_width !== 27) {
 }
 
 // sidebar gap
-$sidebarGap = blocksy_get_with_percentage( 'sidebarGap', '4%' );
+$sidebarGap = blocksy_get_with_percentage('sidebarGap', '4%');
 if ($sidebarGap !== '4%') {
 	$css->put(
 		'[data-sidebar]',

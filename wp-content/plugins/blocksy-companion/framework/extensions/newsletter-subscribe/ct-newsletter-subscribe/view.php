@@ -81,7 +81,9 @@ echo $before_widget;
 echo '<div class="ct-widget-inner"' . $data_alignment . '' . $data_container . '>';
 
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-echo $before_title . wp_kses_post($title) . $after_title;
+if (! empty(trim($title))) {
+	echo $before_title . wp_kses_post($title) . $after_title;
+}
 
 
 ?>

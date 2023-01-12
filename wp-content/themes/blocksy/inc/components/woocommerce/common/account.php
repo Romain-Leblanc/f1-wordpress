@@ -1,8 +1,18 @@
 <?php
 
+if (! function_exists('blocksy_woocommerce_has_account_customizations')) {
+	function blocksy_woocommerce_has_account_customizations() {
+		return ! defined('YITH_WCMAP');
+	}
+}
+
 add_filter(
 	'do_shortcode_tag',
 	function ($output, $tag, $attr, $m) {
+		if (! blocksy_woocommerce_has_account_customizations()) {
+			return $output;
+		}
+
 		if ($tag === 'woocommerce_my_account') {
 			$endpoint = WC()->query->get_current_endpoint();
 
@@ -30,6 +40,10 @@ add_filter(
 );
 
 add_action('woocommerce_before_account_navigation', function () {
+	if (! blocksy_woocommerce_has_account_customizations()) {
+		return;
+	}
+
 	$username = '';
 
 	if (get_theme_mod('has_account_page_name', 'no') === 'yes') {

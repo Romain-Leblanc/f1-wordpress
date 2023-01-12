@@ -1,3 +1,47 @@
+1.8.66: 2023-01-11
+- Improvement: Ensure current screen prefix is never null
+- Improvement: Integrate antispambot() function into e-mail address fields
+- Improvement: Border and shadow options inherit state issue
+- Improvement: Better integration with WooCommerce Customize My Account Page plugin
+- Fix: Table inside additional information tab width issue when layout set to boxed
+- Fix: Background option responsive issue when setting different image or color per device
+- Fix: Minor PHP syntax improvement for better compatibility with old PHP versions
+- Fix: Password protected products form is full width
+- Fix: Header button ghost view gap issue
+
+1.8.65: 2022-12-29
+Improvement: General fixes and improvements
+
+1.8.64: 2022-12-28
+- Improvement: Header menu item - better handle the stretch menu option
+- Improvement: Proper computation of price taxes in search live results
+- Improvement: Correctly count articles for author pages
+- Improvement: Support for LearnDash quiz CPT
+- Fix: Minor syntax error for old php versions
+- Fix: Translation (POT) files are not generated correctly
+
+1.8.63: 2022-12-22
+- Improvement: Better compatibility with WooCommerce Composite Products
+- Improvement: Add check for missing haystack
+- Improvement: Button header element without a label has some redundant spacing
+- Improvement: Shortcode support in header button link option
+
+1.8.62: 2022-12-15
+- Improvement: Additional actions for page title with two post meta elements
+- Improvement: Don't output `data-header` and `data-footer` attributes if header or footer is disabled
+- Improvement: Add filter to disable comments.css file on single pages
+- Fix: WooCommerce 7.2 and "Sold individually" products have a broken quantity input design
+- Fix: Global colors won't change dynamically when changing a color palette
+
+1.8.61: 2022-12-09
+- Fix: Minor layout issue with overflow-x on mobile
+
+1.8.60: 2022-12-08
+- Improvement: Better handle the theme color palettes inside block editor
+- Improvement: Scoped selector for infinite loading pagination
+- Improvement: Correctly compute sidebar position for BuddyPress pages
+- Improvement: Better integration with "WooCommerce Buy for me" plugin
+
 1.8.59: 2022-11-24
 - Improvement: Menu accessibility improvements
 - Improvement: theme.json file minor styling improvements

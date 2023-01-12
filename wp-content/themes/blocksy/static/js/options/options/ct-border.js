@@ -23,7 +23,7 @@ const Border = ({ value, option, onChange }) => {
 				className={classnames('ct-value-changer', {
 					['active']: isOpen,
 				})}>
-				{value.style !== 'none' && (
+				{value.style !== 'none' && !value.inherit && (
 					<input
 						type="number"
 						value={value.width}
@@ -78,7 +78,7 @@ const Border = ({ value, option, onChange }) => {
 				</OutsideClickHandler>
 			</div>
 
-			{value.style !== 'none' && (
+			{value.style !== 'none' && !value.inherit && (
 				<Fragment>
 					<ColorPicker
 						onChange={(colorValue) =>

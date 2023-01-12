@@ -30,8 +30,8 @@ export const mount = (paginationContainer) => {
 
 	let inf = new InfiniteScroll(layoutEl, {
 		// debug: true,
-		checkLastPage: '.next',
-		path: '.next',
+		checkLastPage: '.ct-pagination .next',
+		path: '.ct-pagination .next',
 		append: getAppendSelectorFor(layoutEl),
 		button:
 			paginationType === 'load_more'

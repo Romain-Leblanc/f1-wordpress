@@ -75,6 +75,8 @@ add_filter(
 				$gallery_args
 			);
 
+			$blocksy_current_variation = null;
+
 			if (get_theme_mod('gallery_style', 'horizontal') === 'vertical') {
 				$result['blocksy_gallery_style'] =  'thumbs-left';
 			} else {

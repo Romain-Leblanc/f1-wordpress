@@ -2,6 +2,22 @@
 
 class Blocksy_Static_Css_Files {
 	public function all_static_files() {
+
+		$should_load_comments_css = (
+			is_singular()
+			&&
+			(
+				blocksy_has_comments()
+				||
+				is_customize_preview()
+			)
+		);
+
+		$should_load_comments_css = apply_filters(
+			'blocksy:static-files:ct-comments-styles',
+			$should_load_comments_css
+		);
+
 		return [
 			[
 				'id' => 'ct-main-styles',
@@ -128,15 +144,7 @@ class Blocksy_Static_Css_Files {
 				'id' => 'ct-comments-styles',
 				'url' => '/static/bundle/comments.min.css',
 				'deps' => ['ct-main-styles'],
-				'enabled' => (
-					is_singular()
-					&&
-					(
-						blocksy_has_comments()
-						||
-						is_customize_preview()
-					)
-				)
+				'enabled' => $should_load_comments_css
 			],
 
 			[

@@ -4193,7 +4193,7 @@ msgstr "Установка бета-обновлений на рабочий с�
 
 #: framework/premium/static/js/components/BetaConsent.js:83
 msgid "Even having your website completely broken is not excluded. Please proceed with caution."
-msgstr "Не исключена даже полная поломка сайта. Пожалуйста, действуйте с осторожностью."
+msgstr "Не исключена д��же полная поломка сайта. Пожалуйста, действуйте с осторожностью."
 
 #: framework/premium/static/js/footer/CloneItem.js:65
 #: framework/premium/static/js/header/CloneItem.js:65

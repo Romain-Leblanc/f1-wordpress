@@ -329,7 +329,7 @@ class Blocksy_Header_Builder_Elements {
 		if (blocksy_default_akg('has_cart_panel_quantity', $atts, 'no') === 'yes') {
 			add_filter(
 				'woocommerce_widget_cart_item_quantity',
-				'blocksy_add_minicart_quantity_fields',
+				[$this, 'add_minicart_quantity_fields'],
 				10, 3
 			);
 		}
@@ -343,7 +343,7 @@ class Blocksy_Header_Builder_Elements {
 
 		remove_filter(
 			'woocommerce_widget_cart_item_quantity',
-			'blocksy_add_minicart_quantity_fields',
+			[$this, 'add_minicart_quantity_fields'],
 			10, 3
 		);
 
@@ -401,5 +401,38 @@ class Blocksy_Header_Builder_Elements {
 
 			'</div>'
 		);
+	}
+
+	public function add_minicart_quantity_fields($html, $cart_item, $cart_item_key) {
+		$_product = apply_filters(
+			'woocommerce_cart_item_product',
+			$cart_item['data'],
+			$cart_item,
+			$cart_item_key
+		);
+		$product_price = apply_filters(
+			'woocommerce_cart_item_price',
+			WC()->cart->get_product_price($cart_item['data']),
+			$cart_item,
+			$cart_item_key
+		);
+
+		if ($_product->is_sold_individually()) {
+			$product_quantity = sprintf( '1 <input type="hidden" name="cart[%s][qty]" value="1">', $cart_item_key );
+		} else {
+			$product_quantity = trim(woocommerce_quantity_input(
+				array(
+					'input_name'   => "cart[{$cart_item_key}][qty]",
+					'input_value'  => $cart_item['quantity'],
+					'max_value'    => $_product->get_max_purchase_quantity(),
+					'min_value'    => '0',
+					'product_name' => $_product->get_name(),
+				),
+				$_product,
+				false
+			));
+		}
+
+		return '<div class="ct-product-actions">' . $product_quantity . '<span class="multiply-symbol">×</span>' . $product_price . '</div>';
 	}
 }

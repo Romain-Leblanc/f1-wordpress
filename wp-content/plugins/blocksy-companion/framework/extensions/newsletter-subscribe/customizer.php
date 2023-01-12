@@ -5,7 +5,7 @@ $options = [
 	'type' => 'ct-panel',
 	'switch' => true,
 	'value' => 'yes',
-	'setting' => [ 'transport' => 'postMessage' ],
+	'sync' => blocksy_sync_single_post_container(),
 	'inner-options' => [
 
 		blocksy_rand_md5() => [
@@ -80,7 +80,9 @@ $options = [
 					'label' => __( 'Name Field', 'blocksy-companion' ),
 					'value' => 'no',
 					'disableRevertButton' => true,
-					'setting' => [ 'transport' => 'postMessage' ],
+					'sync' => blocksy_sync_single_post_container([
+						'loader_selector' => '.ct-newsletter-subscribe-block'
+					]),
 				],
 
 				blocksy_rand_md5() => [

@@ -50,7 +50,7 @@ if (! function_exists('blocksy_entry_excerpt')) {
 		ob_start();
 		$post_excerpt = get_the_excerpt($post_id);
 		$excerpt_additions = ob_get_clean();
-		
+
 		if ($source === 'excerpt' && empty(trim($post_excerpt))) {
 			return '';
 		}
@@ -58,7 +58,7 @@ if (! function_exists('blocksy_entry_excerpt')) {
 		$post = get_post($post_id);
 
 		$has_native_excerpt = $post->post_excerpt;
-		
+
 		// Check for woo product ( wysiwyg editor )
 		$is_product = $post->post_type === 'product';
 
@@ -134,7 +134,7 @@ function blocksy_post_navigation() {
 	);
 
 	$post_nav_criteria = get_theme_mod($prefix . '_post_nav_criteria', 'default');
-	
+
 	if ( $post_nav_criteria !== 'default' ) {
 		$post_type = get_post_type();
 		$post_nav_taxonomy_default = array_keys(blocksy_get_taxonomies_for_cpt(
@@ -142,12 +142,12 @@ function blocksy_post_navigation() {
 		))[0];
 
 		$post_nav_taxonomy = get_theme_mod($prefix . '_post_nav_taxonomy', $post_nav_taxonomy_default);
-		
+
 		$next_post = apply_filters(
 			'blocksy:post-navigation:next-post',
 			get_adjacent_post(true, '', true, $post_nav_taxonomy)
 		);
-	
+
 		$previous_post = apply_filters(
 			'blocksy:post-navigation:previous-post',
 			get_adjacent_post(true, '', false, $post_nav_taxonomy)

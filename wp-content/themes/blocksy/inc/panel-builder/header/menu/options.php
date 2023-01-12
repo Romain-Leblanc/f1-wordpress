@@ -642,6 +642,7 @@ $options = [
 				'max' => 20,
 				'divider' => 'top',
 				'setting' => [ 'transport' => 'postMessage' ],
+				'desc' => __( 'Please note, this option will affect only submenus on 3rd level and below.', 'blocksy' ),
 			],
 		],
 	],

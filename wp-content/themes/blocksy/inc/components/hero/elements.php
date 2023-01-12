@@ -406,6 +406,20 @@ foreach ($hero_elements as $index => $single_hero_element) {
 			$meta_indexes['second'] !== null
 		) {
 			if ($index === $meta_indexes['first']) {
+				do_action('blocksy:hero:' . $single_hero_element['id'] . ':first:before');
+			}
+
+			if ($index === $meta_indexes['second']) {
+				do_action('blocksy:hero:' . $single_hero_element['id'] . ':second:before');
+			}
+		}
+
+		if (
+			$meta_indexes['first'] !== null
+			&&
+			$meta_indexes['second'] !== null
+		) {
+			if ($index === $meta_indexes['first']) {
 				// $attr['data-id'] = 'first';
 			}
 
@@ -472,6 +486,20 @@ foreach ($hero_elements as $index => $single_hero_element) {
 					'prefix' => $prefix . '_hero_meta'
 				]
 			);
+		}
+
+		if (
+			$meta_indexes['first'] !== null
+			&&
+			$meta_indexes['second'] !== null
+		) {
+			if ($index === $meta_indexes['first']) {
+				do_action('blocksy:hero:' . $single_hero_element['id'] . ':first:after');
+			}
+
+			if ($index === $meta_indexes['second']) {
+				do_action('blocksy:hero:' . $single_hero_element['id'] . ':second:after');
+			}
 		}
 	}
 

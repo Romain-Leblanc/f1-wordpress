@@ -69,7 +69,7 @@ const BoxShadow = ({ value, option, onChange }) => {
 				</span>
 			</OutsideClickHandler>
 
-			{value.enable && (
+			{value.enable && !value.inherit && (
 				<SingleColorPicker
 					innerRef={colorPicker}
 					picker={{

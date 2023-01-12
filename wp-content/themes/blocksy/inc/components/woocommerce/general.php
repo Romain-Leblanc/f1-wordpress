@@ -35,32 +35,6 @@ add_action(
 	}
 );
 
-add_action('elementor/widget/before_render_content', function($widget) {
-	if (! class_exists('ElementorPro\Modules\Woocommerce\Widgets\Cart')) {
-		return;
-	}
-
-	if ($widget instanceof ElementorPro\Modules\Woocommerce\Widgets\Cart) {
-		global $ct_skip_cart;
-		$ct_skip_cart = true;
-	}
-}, 10 , 1);
-
-add_filter('wc_get_template', function ($template, $template_name, $args, $template_path, $default_path) {
-	if ($template_name !== 'cart/cart.php') {
-		return $template;
-	}
-
-	global $ct_skip_cart;
-
-	if ($ct_skip_cart) {
-		$default_path = WC()->plugin_path() . '/templates/';
-		return $default_path . $template_name;
-	}
-
-	return $template;
-}, 10, 5);
-
 add_filter(
 	'woocommerce_format_sale_price',
 	function ($price, $regular_price, $sale_price) {
@@ -69,6 +43,20 @@ add_filter(
 	10,
 	3
 );
+
+add_filter('woocommerce_quantity_input_args', function ($args, $product) {
+	global $blocksy_quantity_args;
+	$blocksy_quantity_args = $args;
+
+	$blocksy_quantity_args['min_value'] = max($blocksy_quantity_args['min_value'], 0);
+	$blocksy_quantity_args['max_value'] = 0 < $blocksy_quantity_args['max_value'] ? $blocksy_quantity_args['max_value'] : '';
+
+	if ('' !== $blocksy_quantity_args['max_value'] && $blocksy_quantity_args['max_value'] < $blocksy_quantity_args['min_value']) {
+		$blocksy_quantity_args['max_value'] = $blocksy_quantity_args['min_value'];
+	}
+
+	return $args;
+}, 10, 2);
 
 add_action(
 	'woocommerce_before_quantity_input_field',
@@ -190,15 +178,25 @@ add_action(
 		if ($template_name === 'global/quantity-input.php') {
 			$quantity = ob_get_clean();
 
-			if (get_theme_mod('has_custom_quantity', 'yes') === 'yes') {
-				echo str_replace(
-					'class="quantity"',
-					'class="quantity" data-type="' . get_theme_mod('quantity_type', 'type-2') . '"',
-					$quantity
-				);
+			$final_quantity_look = 'class="quantity"';
+
+			global $blocksy_quantity_args;
+
+			$args = $blocksy_quantity_args;
+
+			if ($args['max_value'] && $args['min_value'] === $args['max_value']) {
+				$final_quantity_look = 'class="quantity hidden"';
 			} else {
-				echo $quantity;
+				if (get_theme_mod('has_custom_quantity', 'yes') === 'yes') {
+					$final_quantity_look .= ' data-type="' . get_theme_mod('quantity_type', 'type-2') . '"';
+				}
 			}
+
+			echo str_replace(
+				'class="quantity"',
+				$final_quantity_look,
+				$quantity
+			);
 		}
 
 		if ($template_name === 'single-product/up-sells.php') {
@@ -246,39 +244,6 @@ add_action(
 	4,
 	4
 );
-
-function blocksy_add_minicart_quantity_fields($html, $cart_item, $cart_item_key) {
-	$_product = apply_filters(
-		'woocommerce_cart_item_product',
-		$cart_item['data'],
-		$cart_item,
-		$cart_item_key
-	);
-	$product_price = apply_filters(
-		'woocommerce_cart_item_price',
-		WC()->cart->get_product_price($cart_item['data']),
-		$cart_item,
-		$cart_item_key
-	);
-
-	if ($_product->is_sold_individually()) {
-		$product_quantity = sprintf( '1 <input type="hidden" name="cart[%s][qty]" value="1">', $cart_item_key );
-	} else {
-		$product_quantity = trim(woocommerce_quantity_input(
-			array(
-				'input_name'   => "cart[{$cart_item_key}][qty]",
-				'input_value'  => $cart_item['quantity'],
-				'max_value'    => $_product->get_max_purchase_quantity(),
-				'min_value'    => '0',
-				'product_name' => $_product->get_name(),
-			),
-			$_product,
-			false
-		));
-	}
-
-	return '<div class="ct-product-actions">' . $product_quantity . '<span class="multiply-symbol">×</span>' . $product_price . '</div>';
-}
 
 if (! function_exists('blocksy_product_get_gallery_images')) {
 	function blocksy_product_get_gallery_images($product) {
@@ -390,7 +355,13 @@ add_action('rest_api_init', function () {
 						);
 					}
 
-					$price = wc_get_price_including_tax($product);
+					$tax_display_mode = get_option('woocommerce_tax_display_shop');
+
+					if ($tax_display_mode === 'incl') {
+						$price = wc_get_price_including_tax($product);
+					} else {
+						$price = wc_get_price_excluding_tax($product);
+					}
 				}
 
 				return $price ? wc_price($price) : 0;

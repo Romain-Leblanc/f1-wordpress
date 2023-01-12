@@ -520,6 +520,7 @@ if (
 			])),
 
 			'value' => $rowBackgroundValue,
+			'forced_background_image' => true,
 			'responsive' => true
 		]);
 	}
@@ -542,6 +543,7 @@ if (
 			),
 
 			'value' => $containerBackgroundValue,
+			'forced_background_image' => true,
 			'responsive' => true
 		]);
 	}

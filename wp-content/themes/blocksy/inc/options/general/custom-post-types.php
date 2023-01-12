@@ -116,6 +116,8 @@ foreach ($custom_post_types as $post_type) {
 		$post_type === 'sfwd-topic'
 		||
 		$post_type === 'sfwd-lessons'
+		||
+		$post_type === 'sfwd-quiz'
 	) {
 		if (! isset($options['learndash_posts_archives'])) {
 			$options[blocksy_rand_md5()] = [

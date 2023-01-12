@@ -134,20 +134,26 @@ if (! function_exists('blocksy_body_attr')) {
 			}
 		}
 
-		$attrs['data-header'] = apply_filters(
-			'blocksy:general:body-header-attr',
-			substr(str_replace(
+		global $blocksy_has_default_header;
+
+		if ($blocksy_has_default_header) {
+			$attrs['data-header'] = apply_filters(
+				'blocksy:general:body-header-attr',
+				substr(str_replace(
+					'ct-custom-',
+					'',
+					blocksy_manager()->header_builder->get_current_section_id()
+				), 0, 6)
+			);
+		}
+
+		if (blocksy_manager()->footer_builder->enabled_on_this_page()) {
+			$attrs['data-footer'] = substr(str_replace(
 				'ct-custom-',
 				'',
-				blocksy_manager()->header_builder->get_current_section_id()
-			), 0, 6)
-		);
-
-		$attrs['data-footer'] = substr(str_replace(
-			'ct-custom-',
-			'',
-			blocksy_manager()->footer_builder->get_current_section_id()
-		), 0, 6);
+				blocksy_manager()->footer_builder->get_current_section_id()
+			), 0, 6);
+		}
 
 		$footer_render = new Blocksy_Footer_Builder_Render();
 		$footer_atts = $footer_render->get_current_section()['settings'];

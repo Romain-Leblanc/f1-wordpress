@@ -172,11 +172,35 @@ function blc_get_contacts_output($args = []) {
 
 					<?php if (! empty(blocksy_akg('content', $single_layer, ''))) { ?>
 						<span class="contact-text">
-							<?php if (! empty(blocksy_akg('link', $single_layer, ''))) { ?>
-								<a href="<?php echo blocksy_akg('link', $single_layer, '') ?>" <?php echo $data_target ?>>
+							<?php
+								$link = blocksy_akg('link', $single_layer, '');
+
+								if (
+									function_exists('blocksy_safe_antispambot')
+									&&
+									strpos($link, 'mailto:') !== false
+								) {
+									$link = blocksy_safe_antispambot($link);
+								}
+							?>
+
+							<?php if (! empty($link)) { ?>
+								<a href="<?php echo $link ?>" <?php echo $data_target ?>>
 							<?php } ?>
 
-							<?php echo do_shortcode(blocksy_akg('content', $single_layer, '')) ?>
+							<?php
+								$content = do_shortcode(blocksy_akg('content', $single_layer, ''));
+
+								if (
+									function_exists('blocksy_safe_antispambot')
+									&&
+									strpos($link, 'mailto:') !== false
+								) {
+									$content = blocksy_safe_antispambot($content);
+								}
+
+								echo $content;
+							?>
 
 							<?php if (! empty(blocksy_akg('link', $single_layer, ''))) { ?>
 								</a>

@@ -5,7 +5,7 @@ Requires PHP: 7.0
 Tested up to: 6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.8.59
+Stable tag: 1.8.66
 
 == Description ==
 
@@ -23,6 +23,30 @@ It runs and adds its enhancements only if the Blocksy theme is installed and act
 2. Activate the plugin by going to **Plugins** page in WordPress admin and clicking on **Activate** link.
 
 == Changelog ==
+1.8.66: 2023-01-11
+- Improvement: Better header sticky calculation with very high elements in the rows
+- Fix: Negative margin should not break sticky header calculations
+
+1.8.65: 2022-12-29
+- Improvement: General fixes and improvements
+
+1.8.64: 2022-12-28
+- Improvement: General fixes and improvements
+
+1.8.63: 2022-12-22
+- Improvement: Correctly re-apply sticky container height in customizer
+- Improvement: Don't output widgets heading tag if title is empty
+
+1.8.62: 2022-12-15
+- Improvement: More reliable checking of taxonomy in conditions manager
+
+1.8.61: 2022-12-09
+- Improvement: General fixes and improvements
+
+1.8.60: 2022-12-08
+- Improvement: Correctly output sticky row background image on responsive devices
+- Improvement: Better calculation for sticky shrink on responsive devices
+
 1.8.59: 2022-11-24
 - Improvement: Better handle the integration with Nextend Social plugin and account modal
 

@@ -331,8 +331,11 @@ class ConditionsManager {
 		if ($rule['rule'] === 'post_with_taxonomy_ids') {
 			$is_blocksy_page = blocksy_is_page();
 			global $blocksy_is_quick_view;
+			global $wp_query;
 
-			if (is_singular() || $is_blocksy_page || true) {
+			global $post;
+
+			if (is_singular() || $is_blocksy_page || $wp_query->in_the_loop) {
 				$post_id = get_the_ID();
 
 				if ($is_blocksy_page) {
@@ -349,6 +352,8 @@ class ConditionsManager {
 					isset($rule['payload']['taxonomy_id'])
 					&&
 					$post_id
+					&&
+					get_term($rule['payload']['taxonomy_id'])
 					&&
 					in_array(
 						get_term($rule['payload']['taxonomy_id'])->taxonomy,

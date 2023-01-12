@@ -32,6 +32,7 @@ class Blocksy_Custom_Post_Types {
 				'cmplz-processing',
 				'cmplz-dataleak',
 				'iamport_payment',
+				'wpcw_achievements',
 				'zoom-meetings',
 				'pafe-formabandonment',
 				'pafe-form-database',
@@ -83,7 +84,6 @@ class Blocksy_Custom_Post_Types {
 				'sfwd-essays',
 				'sfwd-transactions',
 				'sfwd-certificates',
-				'sfwd-quiz',
 				'e-landing-page',
 				'zion_template',
 				'pafe-fonts',
@@ -91,6 +91,7 @@ class Blocksy_Custom_Post_Types {
 				'pdfviewer',
 				'da_image',
 
+				// 'sfwd-quiz',
 				// 'sfwd-topic',
 				// 'sfwd-lessons',
 				// 'sfwd-courses'

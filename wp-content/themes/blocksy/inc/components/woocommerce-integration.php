@@ -3,6 +3,7 @@
 require get_template_directory() . '/inc/components/woocommerce/general.php';
 
 require get_template_directory() . '/inc/components/woocommerce/common/checkout.php';
+require get_template_directory() . '/inc/components/woocommerce/common/cart.php';
 require get_template_directory() . '/inc/components/woocommerce/common/account.php';
 require get_template_directory() . '/inc/components/woocommerce/common/store-notice.php';
 require get_template_directory() . '/inc/components/woocommerce/common/mini-cart.php';

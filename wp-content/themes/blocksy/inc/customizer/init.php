@@ -84,70 +84,6 @@ add_action('customize_save', function ($obj) {
 	}
 });
 
-function blocksy_add_customizer_preview_cache( $maybe_content ) {
-	add_action(
-		'blocksy_customizer_preview_cache',
-		function () use ($maybe_content) {
-			if (is_callable($maybe_content)) {
-				/**
-				 * Note to code reviewers: This line doesn't need to be escaped.
-				 * Function call_user_func($maybe_content) used here escapes the value properly.
-				 */
-				echo call_user_func($maybe_content);
-				return;
-			}
-
-			/**
-			 * Note to code reviewers: This line doesn't need to be escaped.
-			 * Variable $maybe_content used here has the value escaped properly.
-			 */
-			echo $maybe_content;
-		}
-	);
-}
-
-add_action(
-	'wp_footer',
-	function () {
-		if ( ! is_customize_preview() ) {
-			return;
-		}
-
-		ob_start();
-
-		echo '<div class="ct-customizer-preview-cache">';
-		do_action('blocksy_customizer_preview_cache');
-		echo '</div>';
-
-		$html = ob_get_clean();
-
-		// $html = str_replace(' ', '', $html);
-		$search = array(
-			'/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-			'/[^\S ]+\</s',     // strip whitespaces before tags, except space
-			'/(\s)+/s',         // shorten multiple whitespace sequences
-			'/<!--(.|\s)*?-->/', // Remove HTML comments
-		);
-
-		$replace = array(
-			'>',
-			'<',
-			'\\1',
-			'',
-		);
-
-		// $html = preg_replace($search, $replace, $html);
-		/**
-		 * Note to code reviewers: This line doesn't need to be escaped.
-		 * The string used here escapes the value properly.
-		 */
-		echo '<input type="hidden" value="' . htmlspecialchars( $html ) . '" class="ct-customizer-preview-cache-container">';
-	},
-	3000,
-	0
-);
-
-
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
@@ -490,7 +426,7 @@ function blocksy_customizer_register_options(
 
 			$args = [
 				'title' => empty( $opt['option']['title'] )
-					? blocksy_id_to_title( $opt['id'] )
+					? $opt['id']
 					: $opt['option']['title'],
 				'description' => empty( $opt['option']['desc'] )
 					? ''
@@ -576,7 +512,7 @@ function blocksy_customizer_register_options(
 
 			$args_control = [
 				'label' => empty($opt['option']['label'])
-					? blocksy_id_to_title($opt['id'])
+					? $opt['id']
 					: $opt['option']['label'],
 				'description' => empty($opt['option']['desc'])
 					? ''

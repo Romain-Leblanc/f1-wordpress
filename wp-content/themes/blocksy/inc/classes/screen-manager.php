@@ -37,6 +37,10 @@ class Blocksy_Screen_Manager {
 
 		$current_template = blocksy_manager()->get_current_template();
 
+		if (! $current_template) {
+			return false;
+		}
+
 		$result = strpos(
 			$current_template,
 			WC()->plugin_path() . '/templates/'
@@ -101,6 +105,10 @@ class Blocksy_Screen_Manager {
 				) && strpos($actual_prefix, '_archive') === false
 			)
 		) {
+			if (! $args['default_prefix']) {
+				return '';
+			}
+
 			return $args['default_prefix'];
 		}
 
@@ -348,3 +356,61 @@ class Blocksy_Screen_Manager {
 	}
 }
 
+/**
+ * Treat non-posts home page as a simple page.
+ */
+if (! function_exists('blocksy_is_page')) {
+	function blocksy_is_page($args = []) {
+		$args = wp_parse_args(
+			$args,
+			[
+				'shop_is_page' => true,
+				'blog_is_page' => true
+			]
+		);
+
+		static $static_result = null;
+
+		if ($static_result !== null) {
+		}
+
+		$result = (
+			(
+				$args['blog_is_page']
+				&&
+				is_home()
+				&&
+				! is_front_page()
+			) || is_page() || (
+				$args['shop_is_page'] && function_exists('is_shop') && is_shop()
+			) || is_attachment()
+		);
+
+		if ($result) {
+			$post_id = strval(get_the_ID());
+
+			if (is_home() && !is_front_page()) {
+				$post_id = get_option('page_for_posts');
+			}
+
+			if (function_exists('is_shop') && is_shop()) {
+				$post_id = get_option('woocommerce_shop_page_id');
+			}
+
+			if (get_post_type($post_id) !== 'page') {
+				$post_id = get_queried_object_id();
+			}
+
+			$static_result = $post_id;
+
+			if ($post_id === '0') {
+				return true;
+			}
+
+			return $post_id;
+		}
+
+		$static_result = false;
+		return false;
+	}
+}

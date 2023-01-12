@@ -7,6 +7,7 @@ $config = [
 	'excluded_from' => ['offcanvas'],
 	'selective_refresh' => [
 		'menu',
+		'stretch_menu',
 		'dropdown_interaction',
 		'dropdown_click_interaction'
 	],

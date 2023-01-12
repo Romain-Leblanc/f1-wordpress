@@ -914,14 +914,20 @@ $options = [
 					'label' => __( 'Shop Sort', 'blocksy' ),
 					'type' => 'ct-switch',
 					'value' => 'yes',
-					'setting' => [ 'transport' => 'postMessage' ],
+					'sync' => blocksy_sync_whole_page([
+						'prefix' => 'woo_categories',
+						'loader_selector' => '.woo-listing-top'
+					]),
 				],
 
 				'has_shop_results_count' => [
 					'label' => __( 'Shop Results Count', 'blocksy' ),
 					'type' => 'ct-switch',
 					'value' => 'yes',
-					'sync' => 'live'
+					'sync' => blocksy_sync_whole_page([
+						'prefix' => 'woo_categories',
+						'loader_selector' => '.woo-listing-top'
+					]),
 				],
 			],
 

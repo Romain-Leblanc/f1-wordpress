@@ -5,6 +5,7 @@ article > .entry-content {
 	// 	width: var(--default-editor, var(--container-width));
 	// }
 
+	> table,
 	> iframe {
 		--block-width: var(--container-width);
 	}

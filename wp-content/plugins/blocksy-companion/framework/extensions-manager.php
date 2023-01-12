@@ -441,6 +441,10 @@ class ExtensionsManager {
 	}
 
 	private function read_readme_for($path) {
+		if (! $path) {
+			return null;
+		}
+
 		$readme = '';
 
 		ob_start();
